@@ -1,5 +1,5 @@
 // Configuration
-const SERVER_URL = 'http://localhost:7766';
+const SERVER_URL = 'https://logus2k.com';
 const SAMPLE_RATE = 24000;
 
 // Voice data (will be loaded from JSON)
@@ -118,8 +118,8 @@ function connectToServer() {
     log('Connecting to server...');
 
     socket = io(SERVER_URL, {
-        transports: ['websocket', 'polling']
-    });
+        path: "/maya1_server/socket.io/"
+    });    
 
     socket.on('connect', () => {
         log('✅ Connected to server');
