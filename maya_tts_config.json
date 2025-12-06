@@ -1,0 +1,14 @@
+{
+  "model_path": "models/maya1",
+  "host": "0.0.0.0",
+  "port": 7766,
+  "log_level": "info",
+  "access_log": false,
+  "TTS": {
+    "default_voice": "af_heart",
+    "default_speed": 1.0,
+    "chunk_size": 28,
+    "temperature": 0.3,
+    "max_tokens": 3000
+  }
+}

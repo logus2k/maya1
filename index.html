@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maya1</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="socket.io.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header-status"> 
+            <div id="connectionStatusIcon" class="disconnected" title="Disconnected">
+                🔴
+            </div>
+            <!-- NEW: Span for the status text -->
+            <span id="connectionStatusText" class="disconnected-text">OFFLINE</span>
+        </div>
+        
+
+        <section class="section top-section">
+            <div class="content-container content-theme-dark">
+            <div class="content-inner">
+                <div class="content-center">
+                <h1>MAYA1</h1>
+                <p>An experiment with a <a class="reference-link" target="_new" href="https://huggingface.co/maya-research/maya1">state-of-the-art speech model</a> for expressive voice generation</p>
+                </div>
+            </div>
+            </div>
+        </section>
+
+
+
+        <div class="input-group">
+            <label for="voice">Select a Voice</label>
+            <select id="voice" onchange="updateDescription()">
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="description">Voice Description (editable)</label>
+            <textarea type="text" id="description" placeholder="Voice description..."></textarea>
+        </div>
+
+        <div class="input-group">
+            <label for="text">Text to Speak</label>
+            <textarea id="text" placeholder="Enter text here..."></textarea>
+            <div style="margin-top: 8px; margin-bottom: 5px; margin-left: 8px; font-weight: 500; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 13px; color: #131313;">
+                    <div style="margin-left: 5px; font-weight:bold;">Emotions</div>
+                    <span class="emotion-tag" onclick="insertEmotion('angry')">angry</span>
+                    <span class="emotion-tag" onclick="insertEmotion('appalled')">appalled</span>
+                    <span class="emotion-tag" onclick="insertEmotion('chuckle')">chuckle</span>
+                    <span class="emotion-tag" onclick="insertEmotion('cry')">cry</span>
+                    <span class="emotion-tag" onclick="insertEmotion('curious')">curious</span>
+                    <span class="emotion-tag" onclick="insertEmotion('disappointed')">disappointed</span>
+                    <span class="emotion-tag" onclick="insertEmotion('excited')">excited</span>
+                    <span class="emotion-tag" onclick="insertEmotion('exhale')">exhale</span>
+                    <span class="emotion-tag" onclick="insertEmotion('gasp')">gasp</span>
+                    <span class="emotion-tag" onclick="insertEmotion('giggle')">giggle</span>
+                    <span class="emotion-tag" onclick="insertEmotion('gulp')">gulp</span>
+                    <span class="emotion-tag" onclick="insertEmotion('laugh')">laugh</span>
+                    <span class="emotion-tag" onclick="insertEmotion('laugh_harder')">laugh_harder</span>
+                    <span class="emotion-tag" onclick="insertEmotion('mischievous')">mischievous</span>
+                    <span class="emotion-tag" onclick="insertEmotion('sarcastic')">sarcastic</span>
+                    <span class="emotion-tag" onclick="insertEmotion('scream')">scream</span>
+                    <span class="emotion-tag" onclick="insertEmotion('sigh')">sigh</span>
+                    <span class="emotion-tag" onclick="insertEmotion('sing')">sing</span>
+                    <span class="emotion-tag" onclick="insertEmotion('snort')">snort</span>
+                    <span class="emotion-tag" onclick="insertEmotion('whisper')">whisper</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="generateBtn" class="btn-primary" onclick="generateSpeech()">
+                Generate Speech
+            </button>
+            <!--
+            <button id="stopBtn" class="btn-secondary" onclick="stopGeneration()" disabled>
+                Stop
+            </button>
+            -->
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="chunksReceived">0</div>
+                <div class="stat-label">Chunks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="audioSize">0 KB</div>
+                <div class="stat-label">Size</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="duration">0.0s</div>
+                <div class="stat-label">Duration</div>
+            </div>
+        </div>
+
+        <div class="log" id="log" style="display: none;"></div>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>

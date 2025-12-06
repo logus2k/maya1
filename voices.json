@@ -1,0 +1,69 @@
+{
+	"voices": [
+		{
+			"id": "maya1_jack",
+			"name": "Jack",
+			"emoji": "",
+			"description": "Speak in the grizzled, weathered tones of an old Caribbean pirate captain - a deep, rumbling baritone that's been seasoned by forty years of salt spray and rum.",
+			"sampleText": "<angry> Arrr, gather 'round, ye scurvy dogs and landlubbers! <laugh> I be Captain Jack Sparrow, the notorious wolf of the Seven Seas! <whisper> Been sailin' these waters fer nigh on forty years now!"
+		},
+		{
+			"id": "maya1_mary",
+			"name": "Mary",
+			"emoji": "",
+			"description": "Female in their 30s with British accent, warm, friendly and conversational voice.",
+			"sampleText": "Hello! I'm Mary, your warm and friendly assistant. How can I help you today?"
+		},
+		{
+			"id": "maya1_james",
+			"name": "James",
+			"emoji": "",
+			"description": "Male in their 50s with British accent, calm, mature, and professional voice.",
+			"sampleText": "Hello there! I am James, your personal assistant. Please don't hesitate to let me know if you'll need any help from me."
+		},
+		{
+			"id": "maya1_mahika",
+			"name": "Mahika",
+			"emoji": "",
+			"description": "Female in their 20s with Indian accent, professional and supportive voice.",
+			"sampleText": "Good afternoon, I'm Mahika, and I'm really happy to be here and present myself as your technical assistant."
+		},
+		{
+			"id": "maya1_Sam",
+			"name": "Rob",
+			"emoji": "",
+			"description": "Male in their 16s with American accent, teenager and excited voice.",
+			"sampleText": "Hello, hello! This is really cool! What about that?! I'm Rob! I'm resourceful and I can help you when you need, just let me know."
+		},
+		{
+			"id": "maya1_amara",
+			"name": "Amara",
+			"emoji": "",
+			"description": "Female in their 30s with Nigerian accent, articulate, confident and inspiring voice.",
+			"sampleText": "Hello! I'm Amara, and I bring clarity and determination to every interaction. Let's achieve something great together."
+		}
+	],
+	"defaultVoice": "maya1_jack",
+	"emotions": [
+		"angry",
+		"appalled",
+		"chuckle",
+		"cry",
+		"curious",
+		"disappointed",
+		"excited",
+		"exhale",
+		"gasp",
+		"giggle",
+		"gulp",
+		"laugh",
+		"laugh_harder",
+		"mischievous",
+		"sarcastic",
+		"scream",
+		"sigh",
+		"sing",
+		"snort",
+		"whisper"
+	]
+}
