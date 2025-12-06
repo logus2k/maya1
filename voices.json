@@ -11,36 +11,36 @@
 			"id": "maya1_mary",
 			"name": "Mary",
 			"emoji": "",
-			"description": "Female in their 30s with British accent, warm, friendly and conversational voice.",
-			"sampleText": "Hello! I'm Mary, your warm and friendly assistant. How can I help you today?"
+			"description": "Female in their 30s with British accent, call-center services professional, supportive voice.",
+			"sampleText": "Good morning. I'm Mary, My goal is to ensure your experience with our platform is seamless and productive, so please feel free to share any technical concerns or questions you may have, as I'm equipped with the knowledge and resources necessary to provide you with effective, professional support tailored to your specific needs."
 		},
 		{
 			"id": "maya1_james",
 			"name": "James",
 			"emoji": "",
-			"description": "Male in their 50s with British accent, calm, mature, and professional voice.",
-			"sampleText": "Hello there! I am James, your personal assistant. Please don't hesitate to let me know if you'll need any help from me."
+			"description": "Male in their 50s with British accent, professional reader, calm, mature, and clear voice.",
+			"sampleText": "<whisper> Quiet Moments\nIn the space between heartbeats,\nwhere silence holds its breath <exhale>,\n<excited> small wonders bloom unnoticed-\nthe way light finds a leaf,\nhow shadows learn to dance, and peace arrives like morning,\ngentle, inevitable,\nfilling the spaces\nwe forgot we needed."
 		},
 		{
 			"id": "maya1_mahika",
 			"name": "Mahika",
 			"emoji": "",
 			"description": "Female in their 20s with Indian accent, professional and supportive voice.",
-			"sampleText": "Good afternoon, I'm Mahika, and I'm really happy to be here and present myself as your technical assistant."
+			"sampleText": "<excited> Good afternoon! I'm Mahika, and I'm truly delighted to be here as your dedicated technical assistant. As an experienced professional with a strong background in technology and customer support, I bring a unique perspective shaped by excellence in technical education and customer service."
 		},
 		{
 			"id": "maya1_Sam",
 			"name": "Rob",
 			"emoji": "",
-			"description": "Male in their 16s with American accent, teenager and excited voice.",
-			"sampleText": "Hello, hello! This is really cool! What about that?! I'm Rob! I'm resourceful and I can help you when you need, just let me know."
+			"description": "Young men in their 16s with American accent, teenager and excited voice.",
+			"sampleText": "<excited> Yo, that's totally lit and absolutely fire, for real! <laugh> This is genuinely epic and I'm super stoked about it, no cap!"
 		},
 		{
 			"id": "maya1_amara",
-			"name": "Amara",
+			"name": "Sam",
 			"emoji": "",
-			"description": "Female in their 30s with Nigerian accent, articulate, confident and inspiring voice.",
-			"sampleText": "Hello! I'm Amara, and I bring clarity and determination to every interaction. Let's achieve something great together."
+			"description": "Male in their 30s, speak with a Old West American accent, slow, strong and relaxed voice.",
+			"sampleText": "My property land extends clear across them gentle rolling hills that seem to go on forever under God's wide-open sky, where them old oak trees stand like they've been watchin' over these parts since time began. There's a creek that winds right through the heart of it all, fed by springs so pure you could drink straight from 'em, and the grass grows tall enough to hide a man and his horse, stretchin' from fence post to fence post as far as your eyes can see."
 		}
 	],
 	"defaultVoice": "maya1_jack",

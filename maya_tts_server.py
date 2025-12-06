@@ -46,7 +46,7 @@ SNAC_TOKENS_PER_FRAME = 7
 
 DEFAULT_TEMPERATURE = 0.3  # Lower for more consistent generation
 DEFAULT_TOP_P = 0.9
-DEFAULT_MAX_TOKENS = 3000  # Reduced to prevent runaway generation
+DEFAULT_MAX_TOKENS = 3000  # Increased for longer text
 DEFAULT_MIN_TOKENS = 35  # Ensure at least 5 frames (5*7=35)
 DEFAULT_REPETITION_PENALTY = 1.2  # Higher to prevent loops
 
@@ -474,6 +474,63 @@ def get_voice_config(voice: str) -> dict:
     """Get voice configuration."""
     return VOICE_DESCRIPTION_MAP.get(voice, DEFAULT_VOICE_CONFIG)
 
+def chunk_text(text: str, max_chars: int) -> list:
+    """
+    Split text into chunks at sentence boundaries.
+    
+    Splits long text into smaller chunks suitable for TTS generation,
+    preferring to break at sentence boundaries (. ! ?) when possible.
+    
+    Args:
+        text: Input text to split
+        max_chars: Maximum characters per chunk
+        
+    Returns:
+        List of text chunks
+    """
+    import re
+    
+    # Split by sentence-ending punctuation
+    sentences = re.split(r'([.!?]+\s+)', text)
+    
+    chunks = []
+    current_chunk = ""
+    
+    # Recombine sentences with their punctuation
+    for i in range(0, len(sentences), 2):
+        sentence = sentences[i]
+        punctuation = sentences[i + 1] if i + 1 < len(sentences) else ""
+        full_sentence = sentence + punctuation
+        
+        # If adding this sentence would exceed limit
+        if len(current_chunk) + len(full_sentence) > max_chars:
+            # Save current chunk if not empty
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+            
+            # If single sentence is too long, split by word boundaries
+            if len(full_sentence) > max_chars:
+                words = full_sentence.split()
+                temp_chunk = ""
+                for word in words:
+                    if len(temp_chunk) + len(word) + 1 <= max_chars:
+                        temp_chunk += (" " if temp_chunk else "") + word
+                    else:
+                        if temp_chunk:
+                            chunks.append(temp_chunk.strip())
+                        temp_chunk = word
+                current_chunk = temp_chunk
+            else:
+                current_chunk = full_sentence
+        else:
+            current_chunk += full_sentence
+    
+    # Add remaining text
+    if current_chunk:
+        chunks.append(current_chunk.strip())
+    
+    return chunks if chunks else [text]
+
 # ============================================================================
 # FASTAPI + SOCKET.IO SETUP
 # ============================================================================
@@ -599,52 +656,65 @@ async def generate_speech(sid, data):
         if speed != 1.0:
             logger.debug(f"⚠️ Speed parameter {speed} ignored (not supported by Maya-1)")
         
+        # Chunk text if too long (safe limit ~500 chars per generation)
+        max_chars_per_chunk = 500
+        text_chunks = chunk_text(text, max_chars_per_chunk) if len(text) > max_chars_per_chunk else [text]
+        
+        if len(text_chunks) > 1:
+            logger.info(f"📄 Text chunked into {len(text_chunks)} parts for processing")
+        
         # Send start event
         await sio.emit('tts_start', {
             'client_id': client_id,
             'text': text,
             'voice': voice,
+            'text_chunks': len(text_chunks),
             'timestamp': datetime.now().isoformat()
         }, room=audio_sid)
         
-        # Generate and stream audio
+        # Generate and stream audio for each text chunk
         chunk_count = 0
         start_time = time.time()
         
         try:
-            async for audio_chunk in maya_pipeline.generate_speech_stream(
-                description=description,
-                text=text,
-                temperature=temperature,
-            ):
-                chunk_count += 1
+            for text_idx, text_chunk in enumerate(text_chunks, 1):
+                if len(text_chunks) > 1:
+                    logger.info(f"🎤 Processing chunk {text_idx}/{len(text_chunks)}: '{text_chunk[:50]}...'")
                 
-                # Encode audio to base64
-                audio_base64 = base64.b64encode(audio_chunk).decode('utf-8')
-                
-                # Send audio chunk
-                await sio.emit('tts_audio', {
-                    'client_id': client_id,
-                    'audio': audio_base64,
-                    'chunk': chunk_count,
-                    'sample_rate': SNAC_SAMPLE_RATE,
-                    'timestamp': datetime.now().isoformat()
-                }, room=audio_sid)
-                
-                if chunk_count == 1:
-                    latency = time.time() - start_time
-                    logger.info(f"⚡ First chunk latency: {latency:.2f}s")
+                async for audio_chunk in maya_pipeline.generate_speech_stream(
+                    description=description,
+                    text=text_chunk,
+                    temperature=temperature,
+                ):
+                    chunk_count += 1
+                    
+                    # Encode audio to base64
+                    audio_base64 = base64.b64encode(audio_chunk).decode('utf-8')
+                    
+                    # Send audio chunk
+                    await sio.emit('tts_audio', {
+                        'client_id': client_id,
+                        'audio': audio_base64,
+                        'chunk': chunk_count,
+                        'sample_rate': SNAC_SAMPLE_RATE,
+                        'timestamp': datetime.now().isoformat()
+                    }, room=audio_sid)
+                    
+                    if chunk_count == 1:
+                        latency = time.time() - start_time
+                        logger.info(f"⚡ First chunk latency: {latency:.2f}s")
             
             # Send completion event
             total_time = time.time() - start_time
             await sio.emit('tts_complete', {
                 'client_id': client_id,
                 'chunks': chunk_count,
+                'text_chunks': len(text_chunks),
                 'duration': total_time,
                 'timestamp': datetime.now().isoformat()
             }, room=audio_sid)
             
-            logger.info(f"✅ Generation complete: {chunk_count} chunks in {total_time:.2f}s")
+            logger.info(f"✅ Complete: {chunk_count} audio chunks ({len(text_chunks)} text parts) in {total_time:.2f}s")
             
         except Exception as e:
             logger.error(f"❌ Generation error: {e}")
