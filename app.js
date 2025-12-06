@@ -153,15 +153,39 @@ function connectToServer() {
 
     socket.on('tts_audio', (data) => {
         const chunk = data.chunk || chunksReceived + 1;
-        const audioB64 = data.audio;
+        const audioBinary = data.audio;
 
-        if (audioB64) {
-            // Decode base64 to binary
-            const audioBytes = base64ToArrayBuffer(audioB64);
+        if (audioBinary) {
+            // Socket.IO sends binary data as ArrayBuffer or Blob
+            let audioBytes;
+            
+            if (audioBinary instanceof ArrayBuffer) {
+                audioBytes = audioBinary;
+            } else if (audioBinary instanceof Blob) {
+                // Convert Blob to ArrayBuffer
+                audioBinary.arrayBuffer().then(buffer => {
+                    audioChunks.push(buffer);
+                    chunksReceived++;
+                    playAudioChunk(buffer);
+                    if (chunk === 1) {
+                        log(`⚡ First chunk received - playing now!`);
+                    }
+                    updateStats();
+                });
+                return; // Exit early for async Blob handling
+            } else if (audioBinary.buffer) {
+                // TypedArray (like Uint8Array)
+                audioBytes = audioBinary.buffer.slice(
+                    audioBinary.byteOffset, 
+                    audioBinary.byteOffset + audioBinary.byteLength
+                );
+            } else {
+                console.error('Unknown audio data type:', typeof audioBinary);
+                return;
+            }
+            
             audioChunks.push(audioBytes);
             chunksReceived++;
-
-            // Play immediately in real-time
             playAudioChunk(audioBytes);
 
             if (chunk === 1) {
@@ -274,15 +298,6 @@ function playAudioChunk(audioBytes) {
         isPlaying = true;
         log('🔊 Started real-time playback');
     }
-}
-
-function base64ToArrayBuffer(base64) {
-    const binaryString = atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
 }
 
 // Updated function signature to accept the text argument

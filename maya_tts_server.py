@@ -55,60 +55,33 @@ DEFAULT_REPETITION_PENALTY = 1.2  # Higher to prevent loops
 # ============================================================================
 
 VOICE_DESCRIPTION_MAP = {
-    # American English Female
-    'af_heart': {
-        'description': 'Female in their 30s with warm, friendly and conversational voice.',
-        'temperature': 0.3,  # Lower for consistency
-        'lang': 'en'
-    },
-    'af_bella': {
-        'description': 'Female in their 20s with bright, energetic and upbeat voice.',
+    'maya1_jack': {
+        'description': "Speak in the grizzled, weathered tones of an old Caribbean pirate captain - a deep, rumbling baritone that's been seasoned by forty years of salt spray and rum.",
         'temperature': 0.3,
         'lang': 'en'
     },
-    'af_nicole': {
-        'description': 'Female in their 30s with clear, professional and neutral voice.',
+    'maya1_mary': {
+        'description': "Female in their 30s with British accent, call-center services professional, supportive voice.",
         'temperature': 0.3,
         'lang': 'en'
     },
-    'af_sarah': {
-        'description': 'Female in their 40s with rich, calm and mature voice.',
+    'maya1_james': {
+        'description': "Male in their 50s with British accent, professional reader, calm, mature, and clear voice.",
         'temperature': 0.3,
         'lang': 'en'
     },
-    
-    # American English Male
-    'am_michael': {
-        'description': 'Male in their 30s with warm, conversational and neutral voice.',
+    'maya1_mahika': {
+        'description': "Female in their 20s with Indian accent, professional and supportive voice.",
         'temperature': 0.3,
         'lang': 'en'
     },
-    'am_adam': {
-        'description': 'Male in their 40s with deep, authoritative and confident voice.',
+    'maya1_Sam': {
+        'description': "Young men in their 16s with American accent, teenager and excited voice.",
         'temperature': 0.3,
         'lang': 'en'
     },
-    
-    # British English Female
-    'bf_emma': {
-        'description': 'Female in their 30s with british accent and refined, polite voice.',
-        'temperature': 0.3,
-        'lang': 'en'
-    },
-    'bf_alice': {
-        'description': 'Female in their 20s with british accent and cheerful, light voice.',
-        'temperature': 0.3,
-        'lang': 'en'
-    },
-    
-    # British English Male
-    'bm_george': {
-        'description': 'Male in their 40s with british accent and deep, professional voice.',
-        'temperature': 0.3,
-        'lang': 'en'
-    },
-    'bm_lewis': {
-        'description': 'Male in their 30s with british accent and clear, friendly voice.',
+    'maya1_amara': {
+        'description': "Male in their 30s, speak with a Old West American accent, slow, strong and relaxed voice.",
         'temperature': 0.3,
         'lang': 'en'
     },
@@ -688,13 +661,10 @@ async def generate_speech(sid, data):
                 ):
                     chunk_count += 1
                     
-                    # Encode audio to base64
-                    audio_base64 = base64.b64encode(audio_chunk).decode('utf-8')
-                    
-                    # Send audio chunk
+                    # Send audio chunk - Socket.IO handles binary in data dict automatically
                     await sio.emit('tts_audio', {
                         'client_id': client_id,
-                        'audio': audio_base64,
+                        'audio': audio_chunk,  # bytes object - Socket.IO will handle as binary
                         'chunk': chunk_count,
                         'sample_rate': SNAC_SAMPLE_RATE,
                         'timestamp': datetime.now().isoformat()
@@ -718,6 +688,10 @@ async def generate_speech(sid, data):
             
         except Exception as e:
             logger.error(f"❌ Generation error: {e}")
+            logger.error(f"Error type: {type(e).__name__}")
+            logger.error(f"Error args: {e.args}")
+            import traceback
+            logger.error(f"Traceback:\n{traceback.format_exc()}")
             await sio.emit('tts_error', {
                 'client_id': client_id,
                 'error': str(e),

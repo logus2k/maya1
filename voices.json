@@ -19,7 +19,7 @@
 			"name": "James",
 			"emoji": "",
 			"description": "Male in their 50s with British accent, professional reader, calm, mature, and clear voice.",
-			"sampleText": "<whisper> Quiet Moments\nIn the space between heartbeats,\nwhere silence holds its breath <exhale>,\n<excited> small wonders bloom unnoticed-\nthe way light finds a leaf,\nhow shadows learn to dance, and peace arrives like morning,\ngentle, inevitable,\nfilling the spaces\nwe forgot we needed."
+			"sampleText": "<whisper> Quiet Moments\nIn the space between heartbeats,\nwhere silence holds its breath,\nsmall wonders bloom unnoticed-\nthe way light finds a leaf,\nhow shadows learn to dance, and peace arrives like morning,\ngentle, inevitable,\nfilling the spaces\nwe forgot we needed."
 		},
 		{
 			"id": "maya1_mahika",
@@ -40,7 +40,7 @@
 			"name": "Sam",
 			"emoji": "",
 			"description": "Male in their 30s, speak with a Old West American accent, slow, strong and relaxed voice.",
-			"sampleText": "My property land extends clear across them gentle rolling hills that seem to go on forever under God's wide-open sky, where them old oak trees stand like they've been watchin' over these parts since time began. There's a creek that winds right through the heart of it all, fed by springs so pure you could drink straight from 'em, and the grass grows tall enough to hide a man and his horse, stretchin' from fence post to fence post as far as your eyes can see."
+			"sampleText": "My property land extends clear across them gentle rolling hills that seem to go on forever under God's wide-open sky. There's a creek that winds right through the heart of it all, fed by springs so pure you could drink straight from 'em, and the grass grows tall enough to hide a man and his horse, stretchin' from fence post to fence post as far as your eyes can see."
 		}
 	],
 	"defaultVoice": "maya1_jack",
